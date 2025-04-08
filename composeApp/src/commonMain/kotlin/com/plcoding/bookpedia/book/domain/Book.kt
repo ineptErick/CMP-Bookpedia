@@ -12,4 +12,9 @@ data class Book(
     val numPages: Int?,
     val numEditions: Int
 
-)
+) {
+    val imageUrl: Any?
+        get() {
+            TODO()
+        }
+}
