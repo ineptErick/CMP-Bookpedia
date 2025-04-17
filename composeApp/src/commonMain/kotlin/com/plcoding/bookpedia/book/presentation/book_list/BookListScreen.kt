@@ -48,7 +48,7 @@ fun BookListScreenRoot(
 }
 
 @Composable
-private fun BookListScreen(
+fun BookListScreen(
     // принимает текущее состояние и обработчик действий
     state: BookListState,
     onAction: (BookListAction) -> Unit,
