@@ -23,6 +23,7 @@ import androidx.compose.material3.TabRowDefaults
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,8 +32,10 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.rememberNavController
 import cmp_bookpedia.composeapp.generated.resources.Res
 import cmp_bookpedia.composeapp.generated.resources.favorites
+import cmp_bookpedia.composeapp.generated.resources.no_favorite_books
 import cmp_bookpedia.composeapp.generated.resources.no_search_results
 import cmp_bookpedia.composeapp.generated.resources.search_results
 import com.plcoding.bookpedia.book.domain.Book
@@ -87,8 +90,22 @@ fun BookListScreen(
     //  rememberPagerState, чтобы запомнить состояние пейджера между перерисовками.
     //  параметр = лямбда, возвращает значение 2 (т.е. изначально активен третий элемент)
 
-    // состояние для ленивого списка (LazyColumn)
+    // состояние, содержит результаты поиска
+    // Когда оно изменяется, запоминается состояние
     val searchResultsListState = rememberLazyListState()
+
+    // Создает и запоминает состояние списка книг
+    // = информация о текущем положении прокрутки и позволяет управлять прокруткой списка
+    val favoriteBooksListState = rememberLazyListState()
+
+    // эффект, который запускается при изменении указанных зависимостей
+    // = когда изменяется state.searchResults, будет выполнен код внутри блока
+    LaunchedEffect(state.searchResults){
+        // состояние прокрутки для списка результатов поиска
+        searchResultsListState.animateScrollToItem(0)
+        // функция анимирует прокрутку списка до первого элемента (индекс 0)
+    // когда результаты поиска обновляются, список плавно прокручивается к началу
+    }
 
     // Создание вертикального контейнера для размещения дочерних компонентов.
     Column(
@@ -239,9 +256,28 @@ fun BookListScreen(
                                     }
                                 }
                             }
-                           // 1 -> {
 
-                           // }
+                            1 -> { // если 1
+                                if(state.favouriteBooks.isEmpty()){ // Если список избранных книг пустой, отображается текстовое сообщение.
+                                    Text(
+                                        text = stringResource(Res.string.no_favorite_books),
+                                        textAlign = TextAlign.Center,
+                                        style = MaterialTheme.typography.headlineSmall,
+                                    )
+                                } else { // Если список избранных книг не пустой, выводит список книг в сост favouriteBooks
+                                    BookList(
+                                        books = state.favouriteBooks,
+                                        // обработчик клика по книге
+                                        // Когда книга нажата, вызывается функция onAction, передавая действие OnBookClick с идентификатором книги (it).
+                                        onBookClick = {
+                                            onAction(BookListAction.OnBookClick(it))
+                                        },
+                                        modifier = Modifier.fillMaxSize(),
+                                        // состояние прокрутки для управления прокруткой списка книг
+                                        scrollState = favoriteBooksListState
+                                    )
+                                }
+                            }
 
                         }
                     }
