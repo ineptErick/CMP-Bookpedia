@@ -107,6 +107,20 @@ fun BookListScreen(
     // когда результаты поиска обновляются, список плавно прокручивается к началу
     }
 
+    // запускает побочный эффект, когда индекс выбранной вкладки изменяется
+    LaunchedEffect(state.selectedTabIndex){
+        // Когда индекс изменяется,
+        // передается текущая страница pagerState.currentPage, что позволяет знать, какая вкладка выбрана.
+            onAction(BookListAction.OnTabSelected(pagerState.currentPage))
+    }
+
+    // запускает, когда прокрутка на текущей странице
+    LaunchedEffect(pagerState.currentPage){
+        // анимированно прокручивает Pager к индексу вкладки, выбранной пользователем (state.selectedTabIndex).
+        pagerState.animateScrollToPage(state.selectedTabIndex)
+        // = плавный переход между вкладками при изменении текущей страницы
+    }
+
     // Создание вертикального контейнера для размещения дочерних компонентов.
     Column(
         modifier = Modifier
@@ -262,7 +276,7 @@ fun BookListScreen(
                                     Text(
                                         text = stringResource(Res.string.no_favorite_books),
                                         textAlign = TextAlign.Center,
-                                        style = MaterialTheme.typography.headlineSmall,
+                                        style = MaterialTheme.typography.headlineSmall
                                     )
                                 } else { // Если список избранных книг не пустой, выводит список книг в сост favouriteBooks
                                     BookList(
