@@ -1,39 +1,64 @@
 package com.plcoding.bookpedia.core.domain
 
-sealed interface Result<out D, out E: Error> {
-    data class Success<out D>(val data: D): Result<D, Nothing>
-    data class Error<out E: com.plcoding.bookpedia.core.domain.Error>(val error: E):
+// используется для обработки результатов операций, включая успешные результаты и ошибки
+sealed interface Result<out D, out E: Error> { //  D (данные) и E (ошибка)
+    //  out: Ключевое слово, указывающее на ковариантность. Это означает, что D может использоваться только как возвращаемый тип, а не как входной параметр
+    data class Success<out D>(val data: D): // успешный результат
+        Result<D, Nothing>
+    data class Error<out E: com.plcoding.bookpedia.core.domain.Error>(val error: E): // ошибочный результат
         Result<Nothing, E>
 }
 
+// функция будет инлайниться компилятором для повышения производительности
 inline fun <T, E: Error, R> Result<T, E>.map(map: (T) -> R): Result<R, E> {
-    return when(this) {
-        is Result.Error -> Result.Error(error)
-        is Result.Success -> Result.Success(map(data))
+    // T: Тип данных
+    // E: Тип ошибки (должен быть подтипом Error)
+    // R: Тип результата после применения функции преобразования
+
+    return when(this) { // проверяем текущее состояние объекта Result
+
+        // является ли текущий объект ошибкой
+        is Result.Error -> Result.Error(error) // да, возвращается новый объект типа Result.Error, содержащий ту же ошибку
+        // является ли текущий объект успешным результатом
+        is Result.Success -> Result.Success(map(data)) //  да, возвращается новый объект типа Result.Success, в который передаются преобразованные данные с помощью функции map
     }
 }
 
+// функция расширения для интерфейса Result
+// преобразует результат в пустой результат данных
 fun <T, E: Error> Result<T, E>.asEmptyDataResult(): EmptyResult<E> {
-    return map {  }
+    return map {  } // результат вызова функции map, но без преобразования данных (пустой блок)
 }
 
+// функции расширения для обработки успешного результата
+// Принимает действие (action) в качестве параметра, которое выполняется при успешном результате
 inline fun <T, E: Error> Result<T, E>.onSuccess(action: (T) -> Unit): Result<T, E> {
+
+    //  проверяем текущее состояние объекта Result
     return when(this) {
-        is Result.Error -> this
-        is Result.Success -> {
-            action(data)
-            this
+        is Result.Error -> this // Если текущий объект — ошибка, возвращается он сам (this).
+        is Result.Success -> { // Если текущий объект — успешный результат
+            action(data) // Выполняется действие
+            this // Возвращается сам объект
         }
     }
 }
+
+// функция расширения для обработки ошибок
+// Принимает действие (action) в качестве параметра, которое выполняется при ошибочном результате
 inline fun <T, E: Error> Result<T, E>.onError(action: (E) -> Unit): Result<T, E> {
+
+    // проверяет текущее состояние объекта Result
     return when(this) {
-        is Result.Error -> {
-            action(error)
-            this
-        }
+        is Result.Error -> { // Если текущий объект — ошибка
+            action(error) // Выполняется действие
+            this // Возвращается сам объект
+        } // Если текущий объект — успешный результат, возвращается он сам
         is Result.Success -> this
     }
 }
 
+// typealias: Создает псевдоним для типа
+//  EmptyResult<E>: Новый тип, который будет представлять результат без данных и с ошибкой типа E
 typealias EmptyResult<E> = Result<Unit, E>
+//  = Result<Unit, E>: Указывает, что этот новый тип является результатом с данными типа Unit (пустой тип) и ошибкой типа E
