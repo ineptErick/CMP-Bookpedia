@@ -1,6 +1,7 @@
 package com.plcoding.bookpedia.book.data.network
 
 import com.plcoding.bookpedia.book.data.dto.SearchResponseDto
+import com.plcoding.bookpedia.core.data.safeCall
 import com.plcoding.bookpedia.core.domain.DataError
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
