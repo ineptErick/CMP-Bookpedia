@@ -14,55 +14,64 @@ import com.plcoding.bookpedia.core.domain.map
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
+// взаимодействие с удаленным источником данных и локальной базой данных для работы с книгами
 class DefaultBookRepository (
-    private val remoteBookDataSource: RemoteBookDataSource,
-    private val favoriteBookDao: FavoriteBookDao
-): BookRepository {
+    private val remoteBookDataSource: RemoteBookDataSource, // отвечающет за работу с удаленными данными (например, API для поиска книг)
+    private val favoriteBookDao: FavoriteBookDao // управляет локальной базой данных (например, DAO для работы с избранными книгами).
+): BookRepository { // интерфейс
 
+    // поиск книг по заданному запросу
     override suspend fun searchBooks(query: String): Result<List<Book>, DataError.Remote>{
         return remoteBookDataSource
-            .searchBooks(query)
-            .map{ dto ->
+            .searchBooks(query) // список книг
+            .map{ dto -> // каждый элемент результата (DTO) в объект Book
                 dto.results.map {it.toBook()}
             }
     }
 
+    // получение описания книги по её идентификатору
     override suspend fun getBookDescription(bookId: String): Result<String?, DataError>{
+        // получить книгу из локальной базы данных по её идентификатору
         val localResult = favoriteBookDao.getFavoriteBook(bookId)
-
+        // Если книга не найдена в локальной базе данных
         return if(localResult == null){
+            // запрос к удаленному источнику данных
             remoteBookDataSource
-                .getBookDetails(bookId)
-                .map{it.description}
-        } else {
-            Result.Success(localResult.description)
+                .getBookDetails(bookId) // Запрашиваем детали книги
+                .map{it.description} // описание книги из полученных данных
+        } else { //  Если книга найдена в локальной базе данных
+            Result.Success(localResult.description) // успешный результат с описанием книги
         }
     }
 
-    override fun getFavoriteBooks(): Flow<List<Book>> {
+    // получение списка избранных книг
+    override fun getFavoriteBooks(): Flow<List<Book>> { // возвращает поток (Flow) списка книг
         return favoriteBookDao
-            .getFavoriteBooks()
-            .map{ bookEntities ->
+            .getFavoriteBooks() // список избранных книг из базы данных
+            .map{ bookEntities -> // преобразуем каждый элемент в Book
                 bookEntities.map{ it.toBook()}
             }
     }
 
+    // проверка, является ли книга избранной
     override fun isBookFavorite(id: String): Flow<Boolean>{
         return favoriteBookDao
-            .getFavoriteBooks()
-            .map{ bookEntities.any { it.id == id}
+            .getFavoriteBooks() // Получаем список избранных книг
+            .map{ bookEntities.any { it.id == id} // проверяем, есть ли среди них книга с указанным идентификатором
             }
     }
 
+    // добавление книги в избранное
     override suspend fun markAsFavorite(book: Book): EmptyResult<DataError.local>{
         return try {
-            favoriteBookDao.upsert(book.toBookEntity())
-            Result.Success(Unit)
+            favoriteBookDao.upsert(book.toBookEntity()) // Преобразует объект Book в сущность BookEntity и сохраняет её в базе данных с помощью upsert
+            Result.Success(Unit) // успешный результат
         } catch(e: SQLiteException){
-            Result.Error(DataError.Local.DISK_FULL)
+            Result.Error(DataError.Local.DISK_FULL) // диск заполнен
         }
     }
 
+    //  удаление книги из избранного
     override suspend fun deleteFromFavorites(id: String){
         favoriteBookDao.deleteFavoriteBook(id)
     }
