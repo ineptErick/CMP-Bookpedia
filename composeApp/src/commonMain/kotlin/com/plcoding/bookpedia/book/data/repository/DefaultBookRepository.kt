@@ -21,11 +21,11 @@ class DefaultBookRepository (
 ): BookRepository { // интерфейс
 
     // поиск книг по заданному запросу
-    override suspend fun searchBooks(query: String): Result<List<Book>, DataError.Remote>{
+    override suspend fun searchBooks(query: String): Result<List<Book>, DataError.Remote> {
         return remoteBookDataSource
             .searchBooks(query) // список книг
             .map{ dto -> // каждый элемент результата (DTO) в объект Book
-                dto.results.map {it.toBook()}
+                dto.results.map { it.toBook() }
             }
     }
 
