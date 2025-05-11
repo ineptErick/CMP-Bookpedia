@@ -1,3 +1,5 @@
+@file:OptIn(FlowPreview::class)
+
 package com.plcoding.bookpedia.book.presentation.book_list
 
 import androidx.lifecycle.ViewModel
