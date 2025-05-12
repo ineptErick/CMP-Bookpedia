@@ -15,7 +15,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
-import com.google.android.libraries.mapsplatform.transportation.consumer.model.Route
 import com.plcoding.bookpedia.book.presentation.SelectedBookViewModel
 import com.plcoding.bookpedia.book.presentation.book_detail.BookDetailAction
 import com.plcoding.bookpedia.book.presentation.book_detail.BookDetailScreenRoot
