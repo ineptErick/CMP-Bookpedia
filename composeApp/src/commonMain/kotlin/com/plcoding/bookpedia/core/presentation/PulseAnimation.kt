@@ -1,5 +1,7 @@
 package com.plcoding.bookpedia.core.presentation
 
-class PulseAnimation {
+import androidx.compose.ui.Modifier
+
+class PulseAnimation(modifier: Modifier) {
 
 }
