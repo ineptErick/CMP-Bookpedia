@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
 class BookDetailViewModel (
 
     private val bookRepository: BookRepository, // отвечающий за доступ к данным о книгах (получение, сохранение, удаление книг).
-    private val savedStateHandle: SavedStateHandle //  сохранения и восстановления состояния при изменении конфигурации
+    savedStateHandle: SavedStateHandle //  сохранения и восстановления состояния при изменении конфигурации
 
 ): ViewModel() { // позволяет сохранять состояние при изменении конфигурации и управлять жизненным циклом
 

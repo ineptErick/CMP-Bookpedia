@@ -6,6 +6,7 @@ import com.plcoding.bookpedia.book.data.database.FavoriteBookDatabase
 import com.plcoding.bookpedia.book.data.network.KtorRemoteBookDataSource
 import com.plcoding.bookpedia.book.data.network.RemoteBookDataSource
 import com.plcoding.bookpedia.book.data.repository.DefaultBookRepository
+import com.plcoding.bookpedia.book.domain.BookRepository
 import com.plcoding.bookpedia.book.presentation.SelectedBookViewModel
 import com.plcoding.bookpedia.book.presentation.book_detail.BookDetailViewModel
 import com.plcoding.bookpedia.book.presentation.book_list.BookListViewModel
@@ -34,7 +35,7 @@ val sharedModule = module {
     // позволяет Koin возвращать экземпляр KtorRemoteBookDataSource, когда запрашивается RemoteBookDataSource
     singleOf(::KtorRemoteBookDataSource).bind<RemoteBookDataSource>()
     // при запросе RemoteBookDataSource будет возвращен экземпляр DefaultBookRepository
-    singleOf(::DefaultBookRepository).bind<RemoteBookDataSource>()
+    singleOf(::DefaultBookRepository).bind<BookRepository>()
 
     single {
         get<DatabaseFactory>().create() // создать новый экземпляр базы данных

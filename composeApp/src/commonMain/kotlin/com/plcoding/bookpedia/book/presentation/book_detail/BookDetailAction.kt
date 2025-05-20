@@ -8,8 +8,8 @@ import com.plcoding.bookpedia.book.domain.Book
 // все возможные реализации должны находиться в одном файле
 sealed interface BookDetailAction {
 
-    data object onBackClick: BookDetailAction // действие возврата назад, реализует интерфейс
-    data object onFavoriteClick: BookDetailAction // добавления или удаления книги из избранного
+    data object OnBackClick: BookDetailAction // действие возврата назад, реализует интерфейс
+    data object OnFavoriteClick: BookDetailAction // добавления или удаления книги из избранного
     data class OnSelectedBookChange(val book: Book): BookDetailAction // изменения выбранной книги с передачей объекта книги
 
 }
