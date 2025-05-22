@@ -57,12 +57,13 @@ class DefaultBookRepository (
     override fun isBookFavorite(id: String): Flow<Boolean>{
         return favoriteBookDao
             .getFavoriteBooks() // Получаем список избранных книг
-            .map{ bookEntities.any { it.id == id} // проверяем, есть ли среди них книга с указанным идентификатором
+            .map{ bookEntities ->
+                bookEntities.any { it.id == id} // проверяем, есть ли среди них книга с указанным идентификатором
             }
     }
 
     // добавление книги в избранное
-    override suspend fun markAsFavorite(book: Book): EmptyResult<DataError.local>{
+    override suspend fun markAsFavorite(book: Book): EmptyResult<DataError.Local>{
         return try {
             favoriteBookDao.upsert(book.toBookEntity()) // Преобразует объект Book в сущность BookEntity и сохраняет её в базе данных с помощью upsert
             Result.Success(Unit) // успешный результат
