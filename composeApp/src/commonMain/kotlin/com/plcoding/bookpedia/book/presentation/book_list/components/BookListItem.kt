@@ -210,9 +210,5 @@ fun BookListItem(
     }
 }
 
-@Composable
-fun PulseAnimation(modifier: Modifier) {
-    TODO("Not yet implemented")
-}
 
 
