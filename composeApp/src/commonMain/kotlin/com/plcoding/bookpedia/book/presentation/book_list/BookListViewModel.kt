@@ -84,7 +84,7 @@ class BookListViewModel(
             .getFavoriteBooks()
             .onEach { favoriteBooks ->
                 _state.update { it.copy( // каждом обновлении состояния они сохраняются в _state
-                    favoriteBooks = favoriteBooks
+                    favouriteBooks = favoriteBooks
                 ) }
             }
             .launchIn(viewModelScope)
