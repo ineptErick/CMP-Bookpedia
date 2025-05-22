@@ -56,11 +56,3 @@ val sharedModule = module {
 // который содержит определения различных зависимостей и ViewModel'ей,
 // используемых в приложении.
 }
-
-private fun <T> Any.bind() {
-    TODO("Not yet implemented")
-}
-
-fun singleOf(any: Any): Any {
-    TODO("Not yet implemented")
-}
