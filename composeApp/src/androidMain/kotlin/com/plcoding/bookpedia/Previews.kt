@@ -38,8 +38,6 @@ private fun BookSearchBarPreview() {
 
 @Preview
 @Composable
-// предварительный просмотр экрана списка книг с использованием статического списка из 100 объектов Book,
-// каждый из которых имеет определенные свойства.
 private fun BookListScreenPreview(){ // отображения предварительного просмотра экрана списка книг
     BookListScreen( //  отображение экрана со списком книг
         state = BookListState( // создается новый экземпляр BookListState
