@@ -13,41 +13,45 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.plcoding.bookpedia.book.domain.Book
+import com.plcoding.bookpedia.core.domain.Language
 
-// создает вертикальный список книг с возможностью обработки кликов по каждой книге
-// и применением различных визуальных модификаций к элементам списка.
+/**
+ * A scrollable list of books.
+ *
+ * @param books The list of books to display.
+ * @param language The currently selected language for formatting purposes.
+ * @param onBookClick Callback invoked when a book item is tapped.
+ * @param scrollState The state of the scrollable column.
+ */
 @Composable
 fun BookList(
-    books: List<Book>, // books, которые будут отображаться в списке.
-    onBookClick: (Book) -> Unit, // принимает объект Book и не возвращает значения (Unit).
-    // Эта функция будет вызвана при нажатии на элемент списка.
-    modifier: Modifier = Modifier, // модификаторы для настройки внешнего вида компонента
-scrollState: LazyListState = rememberLazyListState()){ // хранит состояние прокрутки для списка
-    // rememberLazyListState() создает и запоминает состояние прокрутки для данного списка
-
-LazyColumn( // отображает элементы в вертикальном списке с ленивой загрузкой.
-    modifier = modifier, // Передача модификатора для настройки внешнего вида LazyColumn.
-    state = scrollState, // Установка состояния прокрутки для списка, чтобы управлять его поведением.
-    verticalArrangement = Arrangement.spacedBy(12.dp), // между элементами списка будет отступ в 12 dp по вертикали
-    horizontalAlignment = Alignment.CenterHorizontally // Центрирует элементы списка по горизонтали
-){
-    items( // принимает список элементов и создает для каждого элемента представление (UI)
-        items = books, //  Передача списка книг для отображения.
-        key = { it.id } // Указание ключа для каждого элемента списка.
-        // помогает Compose отслеживать изменения в элементах списка и оптимизировать обновления UI
-
-    ){ book -> // Лямбда-выражение, которое представляет каждый элемент списка
-
-        BookListItem( // отображение отдельной книги в списке
-            book = book, // Передача текущего объекта book в компонент BookListItem.
-            modifier = Modifier // Передача модификаторов для настройки внешнего вида элемента списка:
-                .widthIn(max = 700.dp) // максимальная ширина элемента до 700 dp.
-                .fillMaxWidth() // Заполняет доступную ширину.
-                .padding(horizontal = 16.dp), // Добавляет горизонтальные отступы по 16 dp.
-            onClick = { // Установка обработчика клика для элемента списка.
-                onBookClick(book) // При нажатии на элемент вызывается функция onBookClick, передавая ей текущий объект book.
-            }
-        )
-}
-}
+    books: List<Book>,
+    language: Language,
+    onBookClick: (Book) -> Unit,
+    modifier: Modifier = Modifier,
+    scrollState: LazyListState = rememberLazyListState()
+) {
+    LazyColumn(
+        modifier = modifier,
+        state = scrollState,
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        items(
+            items = books,
+            key = { it.id }
+        ) { book ->
+            BookListItem(
+                book = book,
+                language = language,
+                modifier = Modifier
+                    .widthIn(max = 700.dp)
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                onClick = {
+                    onBookClick(book)
+                }
+            )
+        }
+    }
 }

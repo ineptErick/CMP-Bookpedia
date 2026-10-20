@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="search_hint">Поиск...</string>
+    <string name="close_hint">Очистить поиск</string>
+    <string name="search_results">Результаты поиска</string>
+    <string name="favorites">Избранное</string>
+    <string name="no_search_results">Упс, по вашему запросу ничего не найдено.</string>
+    <string name="no_favorite_books">В избранном пока ничего нет.</string>
+
+    <string name="book_cover">Обложка книги</string>
+    <string name="rating">Рейтинг</string>
+    <string name="pages">Страниц</string>
+    <string name="languages">Языки</string>
+    <string name="synopsis">Синопсис</string>
+
+    <string name="error_disk_full">Упс, похоже, на диске нет места.</string>
+    <string name="error_unknown">Упс, что-то пошло не так.</string>
+    <string name="error_request_timeout">Время ожидания запроса истекло.</string>
+    <string name="error_no_internet">Не удалось связаться с сервером, проверьте интернет-соединение.</string>
+    <string name="error_too_many_requests">Лимит запросов исчерпан.</string>
+    <string name="error_serialization">Не удалось обработать данные.</string>
+
+    <string name="go_back">Назад</string>
+    <string name="mark_as_favorite">В избранное</string>
+    <string name="remove_from_favorites">Удалить из избранного</string>
+    <string name="description_unavailable">Описание отсутствует.</string>
+
+    <string name="settings">Настройки</string>
+    <string name="language">Язык</string>
+    <string name="russian">Русский</string>
+    <string name="english">English</string>
+</resources>

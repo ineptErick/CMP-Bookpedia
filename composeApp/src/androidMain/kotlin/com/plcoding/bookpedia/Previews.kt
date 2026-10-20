@@ -12,6 +12,7 @@ import com.plcoding.bookpedia.book.domain.Book
 import com.plcoding.bookpedia.book.presentation.book_list.BookListScreen
 import com.plcoding.bookpedia.book.presentation.book_list.BookListState
 import com.plcoding.bookpedia.book.presentation.book_list.components.BookSearchBar
+import com.plcoding.bookpedia.core.domain.Language
 
 // код создает предварительный просмотр компонента строки поиска книг (BookSearchBar)
 // с белым фоном и занимает всю ширину экрана
@@ -39,16 +40,13 @@ private fun BookSearchBarPreview() {
 @Preview
 @Composable
 private fun BookListScreenPreview(){ // отображения предварительного просмотра экрана списка книг
-    BookListScreen( //  отображение экрана со списком книг
-        state = BookListState( // создается новый экземпляр BookListState
-            // содержит данные, необходимые для отображения списка книг
-            searchResults = books // передаем список книг, который будет отображаться на экране.
+    BookListScreen(
+        state = BookListState(
+            searchResults = books
         ),
-        onAction = {} // обработчик действий.
-    // Это может быть использовано для обработки событий,
-    // таких как нажатия кнопок или другие взаимодействия с пользователем.
-    // Поскольку здесь передается пустая функция, это означает,
-    // что никаких действий не будет выполнено при взаимодействии.
+        selectedLanguage = Language.RUSSIAN,   // ← добавили
+        onAction = {},
+        onLanguageToggle = {}                   // ← добавили
     )
 }
 //  список книг.

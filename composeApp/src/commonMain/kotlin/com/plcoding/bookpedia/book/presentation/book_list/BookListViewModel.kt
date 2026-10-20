@@ -25,10 +25,6 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-// basic screen structure - управляет состоянием списка книг
-
-// При каждом действии состояние обновляется,
-// позволяет UI автоматически реагировать на изменения.
 class BookListViewModel(
     private val bookRepository: BookRepository // конструктор
     // используется для доступа к данным о книгах
